@@ -1,79 +1,91 @@
 const express = require('express');
 const { default: mongoose } = require('mongoose');
 const router = express.Router();
-const passport = require('passport');
+const passport = require('../passport.config');
 const User = require('../models/user.model');
 
-
-const initializePassport = require('../passport.config');
-initializePassport(
-  passport, 
-  username => User.find(user => user.username === username),
-  _id => User.find(user => user._id === _id)
-);
-
+// # Middlewares
 const checkAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
-  res.redirect('/');
+  return res.redirect('/');
 };
 
 const checkLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {
-    return res.redirect('/home')
+    return res.redirect('/home');
   }
-  next()
+  next();
 };
 
+// TODO: Middlewares above should be in a separate file
 router.get('/', checkLoggedIn, (req, res, next) => {
   res.render('index');
 });
 
-router.get('/home', checkAuthenticated, async (req, res, next) => {
-  const getUsername = req.user.username;
-  User.find({ username: req.user.username })
-    const followingTweets = await User.aggregate([
-      { $match: { 'followers.user': { '$in': [getUsername] } } },
-      { $unwind: "$tweets" },
-      { $group: { _id: null, tweetArr: { $push : "$tweets" } } },
-      { $project: { _id: 0, tweets: "$tweetArr" } }
-    ])
-    if (followingTweets.length === 0) {
-      const allTweets = { tweets: req.user.tweets };
-      res.render('home', { allTweets, getUsername })
-    } else {
-      const allTweets = { tweets: followingTweets[0].tweets.concat(req.user.tweets) }
-      res.render('home', { allTweets, getUsername })
-    }
-});
+// services/user.js.getUserByUsername
+const getUserByUsername = async req => {
+  const user = await User.findOne({
+    username: req.body.username,
+  });
+  return user;
+};
 
-router.post('/home', async (req, res) => {
-  const ObjectId = new mongoose.Types.ObjectId;
+const getRecentTweets = async username => {
+  return await User.aggregate([
+    { $match: { 'followers.user': { $in: [username] } } },
+    { $unwind: '$tweets' },
+    { $group: { _id: null, tweetArr: { $push: '$tweets' } } },
+    { $project: { _id: 0, tweets: '$tweetArr' } },
+  ]);
+};
+
+const homeFeedHandler = async (req, res, next) => {
+  const followingTweets = await getRecentTweets(req.user.username);
+
+  const feed = {
+    tweets:
+      followingTweets.length > 0
+        ? followingTweets[0].tweets.concat(req.user.tweets)
+        : req.user.tweets,
+  };
+
+  return res.render('home', { feed, username: req.user.username });
+};
+
+router.get('/home', checkAuthenticated, homeFeedHandler);
+
+router.post('/home', checkAuthenticated, async (req, res) => {
+  const ObjectId = new mongoose.Types.ObjectId();
   const reqAdd = req.body.reqAdd;
   if (reqAdd) {
     await User.collection.updateOne(
       { _id: req.user._id },
-      { $push: { tweets: { tweetOwner: req.user.username, tweet: req.body.tweet, likedUsers: [], _id: ObjectId.toString(), likeCount: 0 } } }
-    )
-    res.redirect('/home')
+      {
+        $push: {
+          tweets: {
+            tweetOwner: req.user.username,
+            tweet: req.body.tweet,
+            likedUsers: [],
+            _id: ObjectId.toString(),
+            likeCount: 0,
+          },
+        },
+      },
+    );
+    res.redirect('/home');
   }
 });
 
-router.get('/:username', async (req, res) => {
-  if (req.url === `/${req.user.username}`) {
-    const getUserTweets = await req.user.tweets;
-    if (!getUserTweets || getUserTweets === null) {
-      return res.render('own-profile');
-    } else {
-      res.render('own-profile', { getUserTweets });
-    }
-  } else {
-    const currentUser = await User.collection.findOne({ username: req.params.username }).then((user) => {
-      return user;
-    });
-    res.render('user-profile.pug', { currentUser });
-  };
+router.get('/:username', checkAuthenticated, async (req, res) => {
+  const requestedUser = req.params.username;
+  if (requestedUser === req.user?.username) {
+    return res.render('own-profile', { user: req.user });
+  }
+
+  const user = await getUserByUsername(req);
+  return res.render('user-profile.pug', { user });
 });
 
 router.post('/follow', (req, res) => {
@@ -81,103 +93,117 @@ router.post('/follow', (req, res) => {
   if (reqFollowButton) {
     User.collection.updateOne(
       { _id: req.user._id },
-      { $addToSet: { following: { user: reqFollowButton } } }
-    )
+      { $addToSet: { following: { user: reqFollowButton } } },
+    );
     User.collection.updateOne(
       { username: reqFollowButton },
-      { $addToSet: { followers: { user: req.user.username } } }
-    )
+      { $addToSet: { followers: { user: req.user.username } } },
+    );
     return res.redirect(`/${reqFollowButton}`);
-  };
+  }
 });
 
-router.post('/unfollow', (req, res) => {
+router.post('/unfollow', checkAuthenticated, (req, res) => {
   const reqUnfollowButton = req.body.reqUnfollowButton;
   if (reqUnfollowButton) {
     User.collection.updateOne(
-      { username: reqUnfollowButton},
-      { $pull: { 'followers': { user: req.user.username} } }
-    )
+      { username: reqUnfollowButton },
+      { $pull: { followers: { user: req.user.username } } },
+    );
     User.collection.updateOne(
       { _id: req.user._id },
-      { $pull: { 'following': { user: reqUnfollowButton } } }
-    )
+      { $pull: { following: { user: reqUnfollowButton } } },
+    );
     return res.redirect(`/${reqUnfollowButton}`);
-  };
+  }
 });
 
-router.post('/add', (req, res) => {
-  const ObjectId = new mongoose.Types.ObjectId;
+router.post('/add', checkAuthenticated, async (req, res) => {
+  const ObjectId = new mongoose.Types.ObjectId();
   const reqAdd = req.body.reqAdd;
   const reqHome = req.body.reqHome;
   const username = req.user.username;
+
   if (reqAdd) {
-    User.collection.updateOne(
+    await User.collection.updateOne(
       { _id: req.user._id },
-      { $push: { tweets: { tweetOwner: req.user.username, tweet: req.body.tweet, likedUsers: [], _id: ObjectId.toString(), likeCount: 0 } } }
-    )
+      {
+        $push: {
+          tweets: {
+            tweetOwner: req.user.username,
+            tweet: req.body.tweet,
+            likedUsers: [],
+            _id: ObjectId.toString(),
+            likeCount: 0,
+          },
+        },
+      },
+    );
+
     if (reqHome) {
-      res.redirect('/home')
-    } else {
-      res.redirect(`/${username}`)
+      return res.status(200).redirect('/home');
     }
-  };
+
+    return res.redirect(`/${username}`);
+  }
 });
 
-router.post('/delete', async (req, res) => {
+router.post('/delete', checkAuthenticated, async (req, res) => {
   const reqDelete = req.body.reqDelete;
   const reqHome = req.body.reqHome;
   const username = req.user.username;
   if (reqDelete) {
     await User.collection.updateOne(
       { _id: req.user._id },
-      { $pull: { 'tweets': { _id: reqDelete } } }
-    )
+      { $pull: { tweets: { _id: reqDelete } } },
+    );
     if (reqHome) {
-      res.redirect('/home')
+      res.redirect('/home');
     } else {
-      res.redirect(`/${username}`)
+      res.redirect(`/${username}`);
     }
-  };
+  }
 });
 
-router.post('/like', async (req, res) => {
-  const reqLike = req.body.reqLike;
-  const reqHome = req.body.reqHome;
-  const reqUsername = req.body.reqUsername;
-  if (reqLike) {
-    await User.collection.updateOne(
-      { "tweets._id": reqLike },
-      { $addToSet: { "tweets.$.likedUsers": { user: req.user.username } } },
-    )
-    if (reqHome) {
-      res.redirect('/home')
-    } else if (reqUsername) {
-      res.redirect(`/${reqUsername}`)
-    }
-  };
-});
+router.post('/like', checkAuthenticated, async (req, res) => {
+  const tweetId = req.body.tweetId;
 
-router.post('/unlike', async (req, res) => {
-  const reqUnlike = req.body.reqUnlike;
-  const reqHome = req.body.reqHome;
-  const reqUsername = req.body.reqUsername;
-  if (reqUnlike) {
-    await User.collection.updateOne(
-      { "tweets._id": reqUnlike },
-      { $pull: { "tweets.$.likedUsers": { user: req.user.username } } },
-    )
-    await User.collection.updateOne(
-      { "tweets._id": reqUnlike }, 
-      [{ $set: { tweets: { likeCount: { $size: { $arrayElemAt : [ '$tweets.likedUsers', 0] } } } } }]
-    )
-    if (reqHome) {
-      res.redirect('/home')
-    } else if (reqUsername) {
-      res.redirect(`/${reqUsername}`)
-    }
-  };
-})
+  await User.collection.updateOne(
+    {
+      'tweets._id': tweetId,
+      'tweets.likedUsers': { $ne: req.user.username },
+    },
+    {
+      $push: { 'tweets.$.likedUsers': req.user.username },
+    },
+  );
+
+  const requestSource = new URL(req.headers.referer).pathname;
+
+  const targetSource =
+    !requestSource || requestSource.startsWith('/home') ? '/home' : `/${req.user.username}`;
+
+  return res.redirect(targetSource);
+});
+router.post('/unlike', checkAuthenticated, async (req, res) => {
+  const tweetId = req.body.tweetId;
+
+  await User.collection.updateOne(
+    {
+      'tweets._id': tweetId,
+      'tweets.likedUsers': req.user.username,
+    },
+    {
+      $pull: { 'tweets.$.likedUsers': req.user.username },
+    },
+  );
+
+  const requestSource = new URL(req.headers.referer).pathname;
+  const targetSource =
+    !requestSource || requestSource.startsWith('/home') ? '/home' : `/${req.user.username}`;
+
+  return res.redirect(targetSource);
+});
 
 router.post('/login', checkLoggedIn, async (req, res, next) => {
   const reqLogin = req.body.formLoginType;
@@ -186,7 +212,7 @@ router.post('/login', checkLoggedIn, async (req, res, next) => {
       successRedirect: '/home',
       failureRedirect: '/',
     })(req, res, next);
-  };
+  }
 });
 
 router.post('/register', checkLoggedIn, async (req, res, next) => {
@@ -194,28 +220,27 @@ router.post('/register', checkLoggedIn, async (req, res, next) => {
   if (reqRegister) {
     User.register(new User({ username: req.body.username }), req.body.password, (err, user) => {
       if (err) {
-        res.json({ success: false, message: "Account could not be saved. Error: " + err })
+        res.json({ success: false, message: 'Account could not be saved. Error: ' + err });
       } else {
-        req.login(user, (err) => {
+        req.login(user, err => {
           if (err) {
             res.json({ success: false, message: err });
           } else {
             res.redirect('/');
-          };
+          }
         });
-      };
+      }
     });
-  };
+  }
 });
 
 router.delete('/logout', (req, res) => {
-  req.logOut((err) => {
+  req.logOut(err => {
     if (err) {
       return next(err);
     }
     res.redirect('/');
   });
 });
-
 
 module.exports = router;
