@@ -14,7 +14,7 @@ block content
     form(action='/unfollow' method='POST')
       button(type='submit' name="reqUnfollowButton" class="follow-buttons unfollow" value= user.username) Unfollow
   ul(class="tweet-list")
-    each item in user.tweets
+    each item in currentPageUserTweets.tweets
       div(class="tweet-container")
         span(class="tweet-owner")= item.tweetOwner
         li(class="tweet-text")= item.tweet
@@ -28,5 +28,6 @@ block content
                 span(class="tweet-like-count")= getCount
             - }
           form(action='/unlike' method='POST')
+            input(type="hidden" name="reqUsername" value= user.username)
             button(type='submit' class="like-buttons unlike" name="reqUnlike" value= item._id)
               i(class="fa fa-thumbs-down")

@@ -23,7 +23,7 @@ block content
       button(type='submit' class="logout-button")
         i(class="fa fa-sign-out") Sign Out
   ul(class="tweet-list")
-    each item in user.tweets
+    each item in getUserTweets.tweets
       div(class="tweet-container")
         div(class="delete-button-container")
           form(action='/delete' method='POST')

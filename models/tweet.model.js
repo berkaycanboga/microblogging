@@ -1,12 +1,10 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const passportLocalMongoose = require('passport-local-mongoose');
 
-const userSchema = new Schema(
+const tweetSchema = new Schema(
   {
     username: {
       type: String,
-      required: true,
       index: { unique: true },
     },
     followers: [
@@ -21,12 +19,18 @@ const userSchema = new Schema(
         user: String,
       },
     ],
+    tweets: [
+      {
+        tweet: {
+          type: String,
+        },
+        likedUsers: Array,
+      },
+    ],
   },
-  { collection: 'user', timestamps: true },
+  { collection: 'tweets', timestamps: true }
 );
 
-userSchema.plugin(passportLocalMongoose);
+const Tweets = mongoose.model('tweets', tweetSchema);
 
-const User = mongoose.model('user', userSchema);
-
-module.exports = User;
+module.exports = Tweets;
