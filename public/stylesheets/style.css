@@ -259,6 +259,12 @@ input[type='password'] {
   background-color: red;
 }
 
+.error-message-register {
+  margin: auto;
+  display: block;
+  color: rgb(139, 16, 0);
+}
+
 .liked {
   color: rgb(139, 16, 0);
 }

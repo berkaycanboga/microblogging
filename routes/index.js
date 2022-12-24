@@ -225,7 +225,7 @@ router.post('/register', checkLoggedIn, async (req, res, next) => {
     })
     User.register(new User({ username: req.body.username }), req.body.password, (err, user) => {
       if (err) {
-        res.json({ success: false, message: 'Account could not be saved. Error: ' + err });
+        res.render('index', { message: 'Account could not be saved. Error: ' + err })
       } else {
         req.login(user, err => {
           if (err) {

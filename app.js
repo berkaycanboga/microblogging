@@ -9,7 +9,6 @@ const createError = require('http-errors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-// const flash = require('express-flash');
 const session = require('express-session');
 const passport = require('passport');
 const methodOverride = require('method-override');
@@ -30,7 +29,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-// app.use(flash());
 app.use(
   session({
     secret: process.env.SESSION_SECRET ?? 'hehe_secret_hehe', // TODO: what if there is no SESSION_SECRET in .env file?
