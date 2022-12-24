@@ -21,6 +21,9 @@ const tweetSchema = new Schema(
     ],
     tweets: [
       {
+        tweetOwner: {
+          type: String,
+        },
         tweet: {
           type: String,
         },

@@ -2,73 +2,24 @@ const express = require('express');
 const { default: mongoose } = require('mongoose');
 const router = express.Router();
 const passport = require('../passport.config');
+
+// models
 const User = require('../models/user.model');
 const Tweets = require('../models/tweet.model')
 
-// # Middlewares
-const checkAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  return res.redirect('/');
-};
+// services
+const getCurrentPagesUserByUsername = require('../services/user.getCurrentPagesUserByUsername')
+const getCurrentPagesUserTweets = require('../services/user.getCurrentPagesUserTweets');
+const getTweetsByUsername = require('../services/user.getTweetsByUsername')
+const homeFeedHandler = require('../services/home.feedHandler');
 
-const checkLoggedIn = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return res.redirect('/home');
-  }
-  next();
-};
+// middlewares
+const checkAuthenticated = require('../middlewares/checkAuthenticated');
+const checkLoggedIn = require('../middlewares/checkLoggedIn');
 
-// TODO: Middlewares above should be in a separate file
 router.get('/', checkLoggedIn, (req, res, next) => {
   res.render('index');
 });
-
-// services/user.js.getUserByUsername
-const getCurrentPagesUserByUsername = async req => {
-  const user = await User.findOne({
-    username: req.path.slice(1),
-  });
-  return user;
-};
-
-const getRecentTweets = async username => {
-  return await Tweets.aggregate([
-    { $match: { 'followers.user': { $in: [username] } } },
-    { $unwind: '$tweets' },
-    { $group: { _id: null, tweetArr: { $push: '$tweets' } } },
-    { $project: { _id: 0, tweets: '$tweetArr' } },
-  ]);
-};
-
-const getTweetsByUsername = async req => {
-  const user = await Tweets.findOne({
-    username: req.user.username
-  })
-  return user;
-};
-
-const getCurrentPagesUserTweets = async req => {
-  const user = await Tweets.findOne({
-    username: req.path.slice(1),
-  })
-  return user;
-};
-
-const homeFeedHandler = async (req, res, next) => {
-  const followingTweets = await getRecentTweets(req.user.username);
-  const loggedUserTweets = await getTweetsByUsername(req);
-
-  const feed = {
-    tweets:
-      followingTweets.length > 0
-        ? followingTweets[0].tweets.concat(loggedUserTweets.tweets)
-        : loggedUserTweets.tweets,
-  };
-  console.log(feed);
-  return res.render('home', { feed, username: req.user.username });
-};
 
 router.get('/home', checkAuthenticated, homeFeedHandler);
 
@@ -100,15 +51,20 @@ router.get('/:username', checkAuthenticated, async (req, res) => {
   if (requestedUser === req.user?.username) {
     return res.render('own-profile', { user: req.user, getUserTweets });
   }
-
+  const checkIfUserExists = await User.collection.findOne({ username: requestedUser })
+  if (checkIfUserExists === null) {
+    const error = {
+      status: 404,
+    }
+    return res.status(404).render("error", { error });
+  }
   const user = await getCurrentPagesUserByUsername(req);
   const currentPageUserTweets = await getCurrentPagesUserTweets(req);
-  return res.render('user-profile.pug', { user, currentPageUserTweets });
+  return res.render('user-profile.pug', { user, currentPageUserTweets, username: req.user.username });
 });
 
 router.post('/follow', (req, res) => {
   const reqFollowButton = req.body.reqFollowButton;
-  if (reqFollowButton) {
     User.collection.updateOne(
       { username: req.user.username },
       { $addToSet: { following: { user: reqFollowButton } } },
@@ -126,30 +82,27 @@ router.post('/follow', (req, res) => {
       { $addToSet: { followers: { user: req.user.username } } },
     );
     return res.redirect(`/${reqFollowButton}`);
-  }
 });
 
 router.post('/unfollow', checkAuthenticated, (req, res) => {
-  const reqUnfollowButton = req.body.reqUnfollowButton;
-  if (reqUnfollowButton) {
+  const reqFollowButton = req.body.reqFollowButton;
     User.collection.updateOne(
-      { username: reqUnfollowButton },
+      { username: reqFollowButton },
       { $pull: { followers: { user: req.user.username } } },
     );
     User.collection.updateOne(
       { username: req.user.username },
-      { $pull: { following: { user: reqUnfollowButton } } },
+      { $pull: { following: { user: reqFollowButton } } },
     );
     Tweets.collection.updateOne(
-      { username: reqUnfollowButton },
+      { username: reqFollowButton },
       { $pull: { followers: { user: req.user.username } } },
     );
     Tweets.collection.updateOne(
       { username: req.user.username },
-      { $pull: { following: { user: reqUnfollowButton } } },
+      { $pull: { following: { user: reqFollowButton } } },
     );
-    return res.redirect(`/${reqUnfollowButton}`);
-  }
+    return res.redirect(`/${reqFollowButton}`);
 });
 
 router.post('/add', checkAuthenticated, async (req, res) => {
@@ -241,7 +194,9 @@ router.post('/unlike', checkAuthenticated, async (req, res) => {
   } else {
     const requestSource = new URL(req.headers.referer).pathname;
     const targetSource =
-      !requestSource || requestSource.startsWith('/home') ? '/home' : `/${req.user.username}`;
+      !requestSource || requestSource.startsWith('/home') 
+      ? '/home' 
+      : `/${req.user.username}`;
 
     return res.redirect(targetSource);
   }

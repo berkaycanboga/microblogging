@@ -2,9 +2,9 @@ extends layout
 
 mixin interactionContainer(item, hasLiked)
   button(type='submit' class="like-buttons like" name="tweetId" value= item._id)
-    i(class=["fa fa-thumbs-up", hasLiked ? "liked" : ""])
+    i(class=["fa fa-heart", hasLiked ? "liked" : ""])
   - const likeCount = item.likedUsers.length || 0;
-    span(class="tweet-like-count")= item.likedUsers.length
+    span(class="tweet-like-count")= likeCount
 
 block content
   head
@@ -35,4 +35,4 @@ block content
         div(class="like-buttons-container")
           - const hasLiked = item.likedUsers.includes(user.username);
             form(action=hasLiked ? "/unlike" : "/like", method="post")
-                +interactionContainer(item, hasLiked)
+              +interactionContainer(item, hasLiked)

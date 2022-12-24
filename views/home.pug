@@ -2,7 +2,7 @@ extends layout
 
 mixin interactionContainer(item, hasLiked)
   button(type='submit' class="like-buttons like" name="tweetId" value= item._id)
-    i(class=["fa fa-thumbs-up", hasLiked ? "liked" : ""])
+    i(class=["fa fa-heart", hasLiked ? "liked" : ""])
   - const likeCount = item.likedUsers.length || 0;
     span(class="tweet-like-count")= likeCount
 
