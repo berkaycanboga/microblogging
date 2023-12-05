@@ -1,0 +1,33 @@
+extends layout
+
+block content
+  head
+    title Twapp
+
+  .container.centered-page
+    .auth-form-container
+      h1 Register
+      form#registerForm(action='/register' method='post' onsubmit="submitForm(this);")
+        .form-group
+          label(for="registerUsername") Choose a Username
+          input#registerUsername(type='text' name='username' placeholder='Pick a username' required)
+          div#usernameAvailability
+        span#registerErrorUsername.error-message-container(class=`${registerErrorField === 'username' && registerError ? 'has-error show' : ''}`)
+          | #{registerErrorField === 'username' && registerError ? `${registerError}` : ''}
+
+        .form-group
+          label(for="registerPassword") Set a Password
+          input#registerPassword(type='password' name='password' placeholder='Create a password' required)
+        span#registerErrorPassword.error-message-container(class=`${registerErrorField === 'password' && registerError ? 'has-error show' : ''}`)
+          | #{registerErrorField === 'password' && registerError ? `${registerError}` : ''}
+
+        button.auth-button(type='submit' name='formRegisterType' value='register') Register
+
+        a(href='/') Back to Home
+
+      script.
+        setTimeout(() => {
+          document.querySelectorAll('.error-message-container.show').forEach((el) => {
+            el.classList.remove('show');
+          });
+        }, 5000);

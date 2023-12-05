@@ -1,38 +1,102 @@
 extends layout
 
 mixin interactionContainer(item, hasLiked)
-  button(type='submit' class="like-buttons like" name="tweetId" value= item._id)
-    i(class=["fa fa-heart", hasLiked ? "liked" : ""])
-  - const likeCount = item.likedUsers.length || 0;
-    span(class="tweet-like-count")= likeCount
+  .like-buttons-container
+    form(onsubmit=`handleLikeSubmit(event, '${item._id}')`, action=hasLiked ? "/unlike" : "/like", method="post")
+      button.like-buttons.like(type='submit' name="tweetId" value=item._id)
+        i(class=[hasLiked ? "fas fa-heart" : "far fa-heart"])
+        span.tweet-like-count
+          - const likeCount = item.likedUsers.length || 0;
+          if (likeCount > 0)
+            | #{likeCount}
+      input(type="hidden" name="reqUsername" value=item.tweetOwner)
 
 block content
   head
     meta(charset='UTF-8')
     meta(http-equiv='X-UA-Compatible' content='IE=edge')
     meta(name='viewport' content='width=device-width, initial-scale=1.0')
-    link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
-    title Document
-  h1 Your Profile: #{user.username}
-  div(class="add-div")
-    form(action='/add' method='POST' id='profileForm')
-      input(type='text' name='tweet' maxlength="280" required placeholder='Share something...')
-      button(type='submit' name="reqAdd" class="add-button" value="add") Submit
-  div(class="logout-div")
-    form(action='/logout?_method=DELETE' method='POST')
-      button(type='submit' class="logout-button")
-        i(class="fa fa-sign-out") Sign Out
-  ul(class="tweet-list")
-    each item in getUserTweets.tweets
-      div(class="tweet-container")
-        div(class="delete-button-container")
-          form(action='/delete' method='POST')
-            input(type="hidden" name="reqUsername" value= item.tweetOwner)
-            button(type='submit' class="delete-button" name="reqDelete" value= item._id)
-              i(class="fa fa-trash")
-        span(class="tweet-owner")= item.tweetOwner
-        li(class="tweet-text")= item.tweet
-        div(class="like-buttons-container")
-          - const hasLiked = item.likedUsers.includes(user.username);
-            form(action=hasLiked ? "/unlike" : "/like", method="post")
-              +interactionContainer(item, hasLiked)
+    link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css')
+    title= user.username
+    script(src='https://code.jquery.com/jquery-3.6.4.min.js' integrity='sha256-oP6HI/tZ2L4Aesf84I7n6pZl5+fpICGzxnyuuq1o+KM=' crossorigin='anonymous').
+    script.
+      document.addEventListener('DOMContentLoaded', () => {
+        const redirectToFollowList = (username, type) => {
+          window.location.href = `/${username}/${type}`;
+        }
+
+        const followersButton = document.querySelector('.followers-button');
+        const followingButton = document.querySelector('.following-button');
+
+        followersButton.addEventListener('click', (event) => {
+          event.stopPropagation();
+          const username = '#{user.username}';
+          redirectToFollowList(username, 'followers');
+        });
+
+        followingButton.addEventListener('click', (event) => {
+          event.stopPropagation();
+          const username = '#{user.username}';
+          redirectToFollowList(username, 'following');
+        });
+
+        const userProfiles = document.querySelectorAll('.user-profile');
+
+        userProfiles.forEach((userProfile) => {
+          const username = userProfile.innerText.trim();
+          userProfile.dataset.username = username;
+
+          userProfile.addEventListener('click', () => {
+            const username = userProfile.dataset.username;
+            redirectToProfile(username);
+          });
+
+          const match = username.match(/'([^']*)'/);
+          if (match) userProfile.innerText = match[1];
+        });
+
+        const resizeTextarea = () => {
+          const textarea = document.getElementById("tweetInput");
+          textarea.style.height = "auto";
+          textarea.style.height = `${textarea.scrollHeight}px`;
+        }
+
+        resizeTextarea();
+
+        document.getElementById("tweetInput").addEventListener('input', resizeTextarea);
+      });
+
+  .container.profile-header
+    .profile-info
+      h1= user.username
+
+    .followers-following-buttons
+      a(href='#' class='followers-button')= user.followers.length + ' Followers'
+      a(href='#' class='following-button')= user.following.length + ' Following'
+
+  .add-div.centered-form
+    form(action='/add' method='post' class="centered-form-content tweet-form")
+      textarea#tweetInput(name='tweet' rows='3' maxlength="280" required placeholder='Share something...')
+      input(type="hidden" name="reqAdd" value='home')
+      button.share-button(type='submit' name="reqAdd" value="tweet") Share
+
+  .tweet-list-container
+    ul.tweet-list
+      each item in getUserTweets.tweets
+        .tweet-container.own-profile-tweet-container
+          .delete-button-container
+            form(action='/delete' method='POST')
+              input(type="hidden" name="reqAdd" value='home')
+              button.delete-button(type='submit' name="reqDelete" value=item._id)
+                i(class="fa fa-trash")
+          span.tweet-owner= item.tweetOwner
+          li.tweet-text= item.tweet
+          +interactionContainer(item, item.likedUsers.includes(user.username))
+
+  .logout-div
+    .back-to-home
+      a.back-to-home-button(href='/')
+        i(class="fas fa-home")
+      form(action='/logout?_method=DELETE' method='POST')
+        button.logout-button(type='submit')
+          i(class="fa fa-sign-out")

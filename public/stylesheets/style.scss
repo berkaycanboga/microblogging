@@ -1,3 +1,40 @@
+$color_1: white;
+$color_2: red;
+$color_3: #1a73e8;
+$color_4: #442b2d;
+$color_5: #fff;
+$color_6: #1877f2;
+$color_7: #ffffff;
+$color_8: #e74c3c;
+$color_9: #00447c;
+$font-family_1: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+$background-color_1: #121212;
+$background-color_2: #333;
+$background-color_3: #1a73e8;
+$background-color_4: #cf4435;
+$background-color_5: #e74c3c;
+$background-color_6: #a83629;
+$background-color_7: #4caf50;
+$background-color_8: #45a049;
+$background-color_9: #347937;
+$background-color_10: #e57373;
+$background-color_11: #d9534f;
+$background-color_12: #1a53e8;
+$background-color_13: #155d9c;
+$background-color_14: #444;
+$background-color_15: #555;
+$background-color_16: transparent;
+$background-color_17: #57606f;
+$background-color_18: #434c5e;
+$background-color_19: #272c36;
+$background-color_20: #5cb8b2;
+$background-color_21: #3a7f79;
+$background-color_22: #3f9442;
+$background-color_23: #777;
+$background-color_24: #00447c;
+$background-color_25: #367833;
+$border-color_1: transparent transparent transparent #e74c3c;
+
 @keyframes disappear {
   from {
     transform: scale(1);
@@ -12,68 +49,61 @@
 }
 
 body {
-  background-color: #121212;
-  color: white;
+  background-color: $background-color_1;
+  color: $color_1;
   font-size: 13px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: $font-family_1;
   margin: 0;
   overflow: hidden;
 }
-
 a {
-  color: white;
+  color: $color_1;
   display: block;
-  color: #1877f2;
+  color: $color_6;
   text-decoration: none;
   padding: 10px;
-  background-color: #333;
+  background-color: $background-color_2;
   margin: auto;
-  width: -moz-fit-content;
   width: fit-content;
   border-radius: 5px;
   transition: 0.3s;
+  &:hover {
+    background-color: $background-color_12;
+  }
+  &:active {
+    background-color: $background-color_13;
+    color: $color_5;
+  }
 }
-a:hover {
-  background-color: #1a53e8;
-}
-a:active {
-  background-color: #155d9c;
-  color: #fff;
-}
-
 h1 {
   font-size: 30px;
   margin-bottom: 30px;
   text-align: center;
-  color: white;
+  color: $color_1;
 }
-
 .container.centered-page {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
 }
-
 p {
   text-align: center;
 }
-
 .centered-page {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
 }
-
 textarea {
   padding: 12px 20px;
   margin-bottom: 10px;
   margin: 8px 0;
   box-sizing: border-box;
   border: 0;
-  background-color: #333;
-  color: white;
+  background-color: $background-color_2;
+  color: $color_1;
   resize: none;
   min-height: 50px;
   min-width: 400;
@@ -81,69 +111,61 @@ textarea {
   width: 100%;
   border-radius: 10px;
   font-size: 13px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: $font-family_1;
 }
-
 ul {
   list-style-type: none;
 }
-
 .container {
   margin: auto;
   padding: 20px;
 }
-
 .auth-form-container {
   padding: 25px;
-  background-color: #333;
+  background-color: $background-color_2;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   width: 100%;
   max-width: 400px;
+  h1 {
+    font-size: 30px;
+    margin-bottom: 10px;
+    margin-top: 0;
+    text-align: left;
+    border-bottom: 1px solid white;
+    padding-bottom: 8px;
+  }
 }
-.auth-form-container h1 {
-  font-size: 30px;
-  margin-bottom: 10px;
-  margin-top: 0;
-  text-align: left;
-  border-bottom: 1px solid white;
-  padding-bottom: 8px;
-}
-
 .form-container {
   padding: 25px;
-  background-color: #333;
+  background-color: $background-color_2;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  h1 {
+    font-size: 30px;
+    margin-bottom: 10px;
+    margin-top: 0;
+    text-align: left;
+    border-bottom: 1px solid white;
+    padding-bottom: 8px;
+  }
 }
-.form-container h1 {
-  font-size: 30px;
-  margin-bottom: 10px;
-  margin-top: 0;
-  text-align: left;
-  border-bottom: 1px solid white;
-  padding-bottom: 8px;
-}
-
 .form-group {
   margin: 15px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-
 label {
   display: block;
-  color: white;
+  color: $color_1;
   margin-bottom: 8px;
 }
-
 input {
   width: 100%;
   padding: 12px;
   box-sizing: border-box;
 }
-
 .login-register-div-buttons.popup-button {
   padding: 12px 20px;
   margin: 8px 0;
@@ -155,17 +177,16 @@ input {
   width: 100%;
   border: 0;
   border-radius: 5px;
-  background-color: #1a73e8;
-  color: white;
+  background-color: $background-color_3;
+  color: $color_1;
   opacity: 0.8;
-  background-color: #1a73e8;
+  background-color: $background-color_3;
   position: relative;
   z-index: 2;
+  &:hover {
+    opacity: 0.8;
+  }
 }
-.login-register-div-buttons.popup-button:hover {
-  opacity: 0.8;
-}
-
 .add-button {
   padding: 12px 20px;
   margin: 8px 0;
@@ -177,17 +198,16 @@ input {
   width: 100%;
   border: 0;
   border-radius: 5px;
-  background-color: #1a73e8;
-  color: white;
+  background-color: $background-color_3;
+  color: $color_1;
   position: relative;
   z-index: 2;
+  &:hover {
+    opacity: 0.8;
+    background-color: $background-color_3;
+    opacity: 0.8;
+  }
 }
-.add-button:hover {
-  opacity: 0.8;
-  background-color: #1a73e8;
-  opacity: 0.8;
-}
-
 .logout-button {
   padding: 12px 20px;
   margin: 8px 0;
@@ -199,9 +219,9 @@ input {
   width: 100%;
   border: 0;
   border-radius: 5px;
-  background-color: #1a73e8;
-  color: white;
-  background-color: #e74c3c;
+  background-color: $background-color_3;
+  color: $color_1;
+  background-color: $background-color_5;
   padding: 12px 20px;
   margin: 8px 0;
   box-sizing: border-box;
@@ -212,27 +232,28 @@ input {
   width: 100%;
   border: 0;
   border-radius: 5px;
-  background-color: #e74c3c;
-  color: white;
+  background-color: $background-color_5;
+  color: $color_1;
   position: relative;
   z-index: 2;
+  &:hover {
+    background-color: $background-color_4;
+    background-color: $background-color_4;
+    opacity: 0.8;
+    .fa-sign-out-alt {
+      color: $color_3;
+    }
+  }
+  &:active {
+    background-color: $background-color_6;
+    background-color: $background-color_6;
+    .fa-sign-out-alt {
+      .fa-home {
+        color: $color_1;
+      }
+    }
+  }
 }
-.logout-button:hover {
-  background-color: #cf4435;
-  background-color: #cf4435;
-  opacity: 0.8;
-}
-.logout-button:hover .fa-sign-out-alt {
-  color: #1a73e8;
-}
-.logout-button:active {
-  background-color: #a83629;
-  background-color: #a83629;
-}
-.logout-button:active .fa-sign-out-alt .fa-home {
-  color: white;
-}
-
 .delete-button {
   padding: 12px 20px;
   margin: 8px 0;
@@ -244,17 +265,16 @@ input {
   width: 100%;
   border: 0;
   border-radius: 5px;
-  background-color: #1a73e8;
-  color: white;
-  background-color: transparent;
+  background-color: $background-color_3;
+  color: $color_1;
+  background-color: $background-color_16;
   border: 0;
   font-size: 12px;
   cursor: pointer;
+  &:active {
+    color: $color_2;
+  }
 }
-.delete-button:active {
-  color: red;
-}
-
 .popup-button {
   padding: 12px 20px;
   margin: 8px 0;
@@ -266,8 +286,8 @@ input {
   width: 100%;
   border: 0;
   border-radius: 5px;
-  background-color: #1a73e8;
-  color: white;
+  background-color: $background-color_3;
+  color: $color_1;
   position: relative;
   z-index: 2;
   padding: 12px 20px;
@@ -279,59 +299,53 @@ input {
   margin: auto;
   border: 0;
   border-radius: 5px;
-  background-color: #1a73e8;
-  color: white;
+  background-color: $background-color_3;
+  color: $color_1;
   margin-top: 10px;
+  &:hover {
+    opacity: 0.8;
+    background-color: $background-color_3;
+    opacity: 0.8;
+    opacity: 0.8;
+  }
 }
-.popup-button:hover {
-  opacity: 0.8;
-  background-color: #1a73e8;
-  opacity: 0.8;
-  opacity: 0.8;
-}
-
 .error-container {
   position: relative;
 }
-
 .back-to-home-button {
   margin-bottom: 15px;
 }
-
 .back-button-container {
   position: absolute;
   top: 0;
   left: 0;
   padding: 10px;
 }
-
 .back-to-profile-button {
   position: absolute;
   top: 0;
   left: 0;
   padding: 10px;
   text-decoration: none;
-  color: white;
+  color: $color_1;
   font-size: 16px;
   margin: 25px 0 0 25px;
   padding: 25;
-  color: white;
+  color: $color_1;
   font-size: 18px;
   text-decoration: none;
   margin-bottom: 15px;
+  &:hover {
+    text-decoration: underline;
+    text-decoration: underline;
+  }
 }
-.back-to-profile-button:hover {
-  text-decoration: underline;
-  text-decoration: underline;
-}
-
 .home-centered-form {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
 }
-
 .tweet-form {
   max-width: 400px;
   width: 100%;
@@ -339,7 +353,6 @@ input {
   max-width: 400px;
   width: 100%;
 }
-
 .share-button {
   margin-top: 10px;
   padding: 12px 20px;
@@ -352,32 +365,30 @@ input {
   width: 100%;
   border: 0;
   border-radius: 5px;
-  background-color: #4caf50;
-  color: white;
+  background-color: $background-color_7;
+  color: $color_1;
+  &:hover {
+    opacity: 0.8;
+    background-color: $background-color_8;
+  }
+  &:active {
+    background-color: $background-color_9;
+  }
 }
-.share-button:hover {
-  opacity: 0.8;
-  background-color: #45a049;
-}
-.share-button:active {
-  background-color: #347937;
-}
-
 .centered-form-content {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
 }
-
 .error-message-box {
   position: absolute;
   left: 100%;
   top: 50%;
   transform: translateY(-50%);
   padding: 10px;
-  background-color: #e74c3c;
-  color: white;
+  background-color: $background-color_5;
+  color: $color_1;
   border-radius: 5px;
   font-size: 14px;
   opacity: 0;
@@ -385,12 +396,11 @@ input {
   white-space: nowrap;
   display: inline-block;
 }
-
 .error-message-container {
   margin-top: 10px;
   padding: 10px;
-  background-color: #e57373;
-  color: #442b2d;
+  background-color: $background-color_10;
+  color: $color_4;
   border-radius: 5px;
   font-size: 14px;
   text-align: center;
@@ -405,46 +415,45 @@ input {
   display: flex;
   justify-content: center;
   align-items: center;
+  &::before {
+    content: "!";
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin-right: 15px;
+    line-height: 24px;
+    border-radius: 50%;
+    background-color: $background-color_11;
+    margin-left: 5px;
+    color: $color_5;
+  }
 }
-.error-message-container::before {
-  content: "!";
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  margin-right: 15px;
-  line-height: 24px;
-  border-radius: 50%;
-  background-color: #d9534f;
-  margin-left: 5px;
-  color: #fff;
-}
-
 .error-message-container.show {
   animation: disappear 0.5s forwards 4.5s;
   opacity: 1;
 }
-
 .error-message-box.show {
   opacity: 1;
+  + {
+    input#loginUsername {
+      border: 2px solid #e74c3c;
+    }
+    input#registerUsername {
+      border: 2px solid #e74c3c;
+    }
+  }
+  &:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -10px;
+    transform: translateY(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: $border-color_1;
+    margin-left: 5px;
+  }
 }
-.error-message-box.show + input#loginUsername {
-  border: 2px solid #e74c3c;
-}
-.error-message-box.show + input#registerUsername {
-  border: 2px solid #e74c3c;
-}
-.error-message-box.show:after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: -10px;
-  transform: translateY(-50%);
-  border-width: 5px;
-  border-style: solid;
-  border-color: transparent transparent transparent #e74c3c;
-  margin-left: 5px;
-}
-
 .login-register-div-buttons {
   position: relative;
   z-index: 2;
@@ -460,12 +469,11 @@ input {
   width: calc(100% - 40px);
   width: 100%;
   margin-top: 10px;
+  &:hover {
+    opacity: 0.8;
+    opacity: 0.8;
+  }
 }
-.login-register-div-buttons:hover {
-  opacity: 0.8;
-  opacity: 0.8;
-}
-
 input#loginUsername {
   position: relative;
   z-index: 2;
@@ -473,12 +481,11 @@ input#loginUsername {
   padding: 12px;
   margin: 8px 0;
   box-sizing: border-box;
-  background-color: #333;
-  color: white;
+  background-color: $background-color_2;
+  color: $color_1;
   border: 1px solid #555;
   border-radius: 5px;
 }
-
 input#registerUsername {
   position: relative;
   z-index: 2;
@@ -486,218 +493,195 @@ input#registerUsername {
   padding: 12px;
   margin: 8px 0;
   box-sizing: border-box;
-  background-color: #333;
-  color: white;
+  background-color: $background-color_2;
+  color: $color_1;
   border: 1px solid #555;
   border-radius: 5px;
 }
-
 input#loginPassword {
   width: calc(100% - 20px);
   padding: 12px;
   margin: 8px 0;
   box-sizing: border-box;
-  background-color: #333;
-  color: white;
+  background-color: $background-color_2;
+  color: $color_1;
   border: 1px solid #555;
   border-radius: 5px;
 }
-
 input#registerPassword {
   width: calc(100% - 20px);
   padding: 12px;
   margin: 8px 0;
   box-sizing: border-box;
-  background-color: #333;
-  color: white;
+  background-color: $background-color_2;
+  color: $color_1;
   border: 1px solid #555;
   border-radius: 5px;
 }
-
 h2 {
   text-align: center;
-  color: white;
+  color: $color_1;
 }
-
 h3 {
   text-align: center;
-  color: white;
+  color: $color_1;
 }
-
 .tweet-list-container {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
-
 .tweet-list {
   width: 100%;
   padding: 0;
   margin-top: 50px;
 }
-
 .tweet-container {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding: 1em;
-  background-color: #444;
+  background-color: $background-color_14;
   border-radius: 0.5em;
   box-shadow: 0 0 1em rgba(0, 0, 0, 0.2);
   transition: background-color 0.3s ease, transform 0.3s ease;
   width: 30em;
-  height: -moz-fit-content;
   height: fit-content;
   margin: 1em auto;
   position: relative;
+  &:hover {
+    background-color: $background-color_15;
+    transform: scale(1.02);
+  }
 }
-.tweet-container:hover {
-  background-color: #555;
-  transform: scale(1.02);
-}
-
 .tweet-owner {
   font-weight: 600;
-  color: #1a73e8;
+  color: $color_3;
   margin-bottom: 8px;
   align-self: flex-start;
   margin-right: auto;
   margin-top: 0;
 }
-
 .tweet-text {
   word-break: break-all;
   overflow-wrap: break-word;
   padding-top: 8px;
-  color: white;
+  color: $color_1;
   text-align: left;
   margin-top: 8px;
   flex-grow: 1;
 }
-
 .delete-button-container {
   position: absolute;
   top: 0;
   right: -8px;
   padding: 3px;
 }
-
 .fa-trash {
   opacity: 0.8;
   transition: 0.3s;
-  color: #fff;
+  color: $color_5;
+  &:hover {
+    opacity: 1;
+    color: $color_2;
+  }
 }
-.fa-trash:hover {
-  opacity: 1;
-  color: red;
-}
-
 .fa-heart {
   cursor: pointer;
   transition: 0.3s;
+  &:hover {
+    content: "\f004";
+  }
 }
-.fa-heart:hover {
-  content: "\f004";
-}
-
 .like-buttons-container {
   position: absolute;
   bottom: 0;
   right: 0;
 }
-
 .like-buttons {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0.4em 0.8em;
-  background-color: #57606f;
-  color: #ffffff;
+  background-color: $background-color_17;
+  color: $color_7;
   cursor: pointer;
   border: none;
   border-radius: 0.2em;
   font-size: 0.9em;
   line-height: 1;
   transition: background-color 0.3s ease;
+  &:hover {
+    background-color: $background-color_18;
+  }
+  &:active {
+    background-color: $background-color_19;
+  }
 }
-.like-buttons:hover {
-  background-color: #434c5e;
-}
-.like-buttons:active {
-  background-color: #272c36;
-}
-
 .tweet-like-count {
-  color: #e74c3c;
+  color: $color_8;
   margin-left: 0.3em;
   font-size: 1em;
 }
-
 .logout-div {
   position: absolute;
   top: 0;
   right: 0;
   padding: 20px;
 }
-
 .back-to-home-div {
   position: absolute;
   top: 0;
   right: 0;
   padding: 20px;
 }
-
 .follow-container {
   text-align: center;
   margin-top: 20px;
 }
-
 .followers-following-buttons {
   display: flex;
   gap: 10px;
 }
-
 .followers-button {
   padding: 12px 20px;
   cursor: pointer;
   transition: 0.3s;
   border: 0;
   border-radius: 5px;
-  color: white;
+  color: $color_1;
   text-align: center;
   width: 100%;
   white-space: nowrap;
-  background-color: #5cb8b2;
+  background-color: $background-color_20;
+  &:active {
+    background-color: $background-color_21;
+  }
+  &:hover {
+    opacity: 0.8;
+    opacity: 0.8;
+  }
 }
-.followers-button:active {
-  background-color: #3a7f79;
-}
-.followers-button:hover {
-  opacity: 0.8;
-  opacity: 0.8;
-}
-
 .following-button {
   padding: 12px 20px;
   cursor: pointer;
   transition: 0.3s;
   border: 0;
   border-radius: 5px;
-  color: white;
+  color: $color_1;
   text-align: center;
   width: 100%;
   white-space: nowrap;
-  background-color: #5cb8b2;
+  background-color: $background-color_20;
+  &:active {
+    background-color: $background-color_21;
+  }
+  &:hover {
+    opacity: 0.8;
+    opacity: 0.8;
+  }
 }
-.following-button:active {
-  background-color: #3a7f79;
-}
-.following-button:hover {
-  opacity: 0.8;
-  opacity: 0.8;
-}
-
 .follow-buttons {
   padding: 12px 20px;
   margin: 8px 0;
@@ -711,27 +695,24 @@ h3 {
   width: calc(100% - 40px);
   width: 100%;
   margin-top: 10px;
+  &:hover {
+    opacity: 0.8;
+  }
 }
-.follow-buttons:hover {
-  opacity: 0.8;
-}
-
 .follow-buttons.following {
-  background-color: #1a73e8;
-  color: white;
+  background-color: $background-color_3;
+  color: $color_1;
+  &:hover {
+    opacity: 0.8;
+  }
 }
-.follow-buttons.following:hover {
-  opacity: 0.8;
-}
-
 .login-register-div-buttons.create-account {
-  background-color: #1a73e8;
-  color: white;
+  background-color: $background-color_3;
+  color: $color_1;
+  &:hover {
+    opacity: 0.8;
+  }
 }
-.login-register-div-buttons.create-account:hover {
-  opacity: 0.8;
-}
-
 .follow-button {
   padding: 12px 20px;
   margin: 8px 0;
@@ -743,53 +724,47 @@ h3 {
   border: 0;
   border-radius: 5px;
   margin-left: 10px;
+  &:hover {
+    opacity: 0.8;
+  }
 }
-.follow-button:hover {
-  opacity: 0.8;
-}
-
 .follow-button.following {
-  background-color: #4caf50;
-  color: white;
+  &:active {
+    background-color: $background-color_22;
+  }
+  background-color: $background-color_7;
+  color: $color_1;
 }
-.follow-button.following:active {
-  background-color: #3f9442;
-}
-
 .follow-button.unfollow {
-  background-color: #e74c3c;
-  color: white;
+  background-color: $background-color_5;
+  color: $color_1;
+  &:hover {
+    background-color: $background-color_4;
+  }
+  &:active {
+    background-color: $background-color_6;
+  }
 }
-.follow-button.unfollow:hover {
-  background-color: #cf4435;
-}
-.follow-button.unfollow:active {
-  background-color: #a83629;
-}
-
 .profile-header {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   margin-bottom: 20px;
 }
-
 .profile-info {
   display: flex;
   align-items: center;
   flex-grow: 1;
 }
-
 .profile-buttons {
   display: flex;
   gap: 10px;
   align-items: center;
 }
-
 .followers-list-container {
   display: none;
   position: absolute;
-  background-color: #333;
+  background-color: $background-color_2;
   padding: 10px;
   z-index: 1;
   text-align: center;
@@ -797,38 +772,35 @@ h3 {
   text-align: center;
   margin-bottom: 3px;
   display: inline-block;
-  color: white;
+  color: $color_1;
   text-decoration: none;
   padding: 5px;
-  width: -moz-fit-content;
   width: fit-content;
   border-radius: 3px;
   font-size: 0.9em;
+  .user-profile {
+    &:hover {
+      background-color: $background-color_23;
+      color: $color_5;
+      color: $color_9;
+    }
+    cursor: pointer;
+    text-align: center;
+    margin-bottom: 5px;
+    display: block;
+    color: $color_1;
+    text-decoration: none;
+    padding: 10px;
+    background-color: $background-color_2;
+    margin: auto;
+    width: fit-content;
+    border-radius: 5px;
+  }
 }
-.followers-list-container .user-profile {
-  cursor: pointer;
-  text-align: center;
-  margin-bottom: 5px;
-  display: block;
-  color: white;
-  text-decoration: none;
-  padding: 10px;
-  background-color: #333;
-  margin: auto;
-  width: -moz-fit-content;
-  width: fit-content;
-  border-radius: 5px;
-}
-.followers-list-container .user-profile:hover {
-  background-color: #777;
-  color: #fff;
-  color: #00447c;
-}
-
 .following-list-container {
   display: none;
   position: absolute;
-  background-color: #333;
+  background-color: $background-color_2;
   padding: 10px;
   z-index: 1;
   text-align: center;
@@ -836,53 +808,49 @@ h3 {
   text-align: center;
   margin-bottom: 3px;
   display: inline-block;
-  color: white;
+  color: $color_1;
   text-decoration: none;
   padding: 5px;
-  width: -moz-fit-content;
   width: fit-content;
   border-radius: 3px;
   font-size: 0.9em;
+  .user-profile {
+    &:hover {
+      background-color: $background-color_23;
+      color: $color_5;
+      color: $color_9;
+    }
+    cursor: pointer;
+    text-align: center;
+    margin-bottom: 5px;
+    display: block;
+    color: $color_1;
+    text-decoration: none;
+    padding: 10px;
+    background-color: $background-color_2;
+    margin: auto;
+    width: fit-content;
+    border-radius: 5px;
+  }
 }
-.following-list-container .user-profile {
-  cursor: pointer;
-  text-align: center;
-  margin-bottom: 5px;
-  display: block;
-  color: white;
-  text-decoration: none;
-  padding: 10px;
-  background-color: #333;
-  margin: auto;
-  width: -moz-fit-content;
-  width: fit-content;
-  border-radius: 5px;
-}
-.following-list-container .user-profile:hover {
-  background-color: #777;
-  color: #fff;
-  color: #00447c;
-}
-
 #register-form-div {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #333;
+  background-color: $background-color_2;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   z-index: 9999;
   display: none;
   overflow: hidden;
 }
-
 #backgroundOverlay {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #333;
+  background-color: $background-color_2;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   z-index: 9999;
@@ -892,13 +860,12 @@ h3 {
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
 }
-
 #registerPopup {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #333;
+  background-color: $background-color_2;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   z-index: 9999;
@@ -907,45 +874,43 @@ h3 {
   width: 100%;
   max-width: 400px;
   padding: 10px;
+  .register-login-form-div {
+    background-color: $background-color_2;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  form#registerForm {
+    width: 100%;
+  }
+  .form-group {
+    width: 100%;
+  }
+  input {
+    width: 100%;
+  }
+  button.login-register-div-buttons.login-and-register {
+    width: 100%;
+    margin-top: 10px;
+  }
 }
-#registerPopup .register-login-form-div {
-  background-color: #333;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-#registerPopup form#registerForm {
-  width: 100%;
-}
-#registerPopup .form-group {
-  width: 100%;
-}
-#registerPopup input {
-  width: 100%;
-}
-#registerPopup button.login-register-div-buttons.login-and-register {
-  width: 100%;
-  margin-top: 10px;
-}
-
 .close-button {
   position: absolute;
   top: 10px;
   right: 10px;
   background: none;
   border: none;
-  color: white;
+  color: $color_1;
   font-size: 20px;
   cursor: pointer;
   outline: none;
+  &:hover {
+    color: $color_2;
+  }
 }
-.close-button:hover {
-  color: red;
-}
-
 button.auth-button {
   padding: 12px 20px;
   margin: 8px 0;
@@ -957,17 +922,16 @@ button.auth-button {
   width: 100%;
   border: 0;
   border-radius: 5px;
-  color: white;
+  color: $color_1;
   margin-bottom: 10px;
-  background-color: #1a73e8;
+  background-color: $background-color_3;
+  &:hover {
+    opacity: 0.8;
+  }
+  &:active {
+    background-color: $background-color_24;
+  }
 }
-button.auth-button:hover {
-  opacity: 0.8;
-}
-button.auth-button:active {
-  background-color: #00447c;
-}
-
 button.create-account-button {
   padding: 12px 20px;
   margin: 8px 0;
@@ -979,116 +943,108 @@ button.create-account-button {
   width: 100%;
   border: 0;
   border-radius: 5px;
-  color: white;
-  background-color: #4caf50;
+  color: $color_1;
+  background-color: $background-color_7;
+  &:hover {
+    opacity: 0.8;
+  }
+  &:active {
+    background-color: $background-color_25;
+  }
 }
-button.create-account-button:hover {
-  opacity: 0.8;
-}
-button.create-account-button:active {
-  background-color: #367833;
-}
-
 .profile-icon-container {
   position: absolute;
   top: 0;
   left: 0;
   padding: 20px;
 }
-
 .fa-user {
+  &:hover {
+    color: $color_1;
+    background-color: $background-color_16;
+    opacity: 1;
+  }
   text-align: center;
   width: 30px;
   font-size: 20px;
   opacity: 0.8;
   transition: 0.3s;
-  background-color: transparent;
+  background-color: $background-color_16;
+  &:active {
+    opacity: 0.6;
+  }
 }
-.fa-user:hover {
-  color: white;
-  background-color: transparent;
-  opacity: 1;
-}
-.fa-user:active {
-  opacity: 0.6;
-}
-
 .fa-arrow-left {
-  color: white;
-  background-color: transparent;
+  color: $color_1;
+  background-color: $background-color_16;
   text-align: center;
   width: 30px;
   font-size: 20px;
   opacity: 0.8;
   transition: 0.3s;
-  background-color: transparent;
+  background-color: $background-color_16;
   opacity: 1;
   opacity: 0.6;
 }
-
 .fa-search {
+  &:hover {
+    color: $color_1;
+    background-color: $background-color_16;
+    opacity: 1;
+  }
   text-align: center;
   width: 30px;
   font-size: 20px;
   opacity: 0.8;
   transition: 0.3s;
-  background-color: transparent;
+  background-color: $background-color_16;
+  &:active {
+    opacity: 0.6;
+  }
 }
-.fa-search:hover {
-  color: white;
-  background-color: transparent;
-  opacity: 1;
-}
-.fa-search:active {
-  opacity: 0.6;
-}
-
 .fa-home {
+  &:hover {
+    color: $color_1;
+    background-color: $background-color_16;
+    opacity: 1;
+  }
   text-align: center;
   width: 30px;
   font-size: 20px;
   opacity: 0.8;
   transition: 0.3s;
-  background-color: transparent;
+  background-color: $background-color_16;
+  &:active {
+    opacity: 0.6;
+  }
 }
-.fa-home:hover {
-  color: white;
-  background-color: transparent;
-  opacity: 1;
-}
-.fa-home:active {
-  opacity: 0.6;
-}
-
 .search-form {
   position: relative;
   display: flex;
   align-items: center;
   margin-top: 20px;
   position: relative;
+  input {
+    border-radius: 20px;
+    width: 400px;
+    background-color: $background-color_2;
+    color: $color_1;
+    border: none;
+  }
 }
-.search-form input {
-  border-radius: 20px;
-  width: 400px;
-  background-color: #333;
-  color: white;
-  border: none;
-}
-
 .search-button {
   position: absolute;
   right: 0;
-  background-color: transparent;
+  background-color: $background-color_16;
   border: none;
   cursor: pointer;
   border-left: white;
+  i {
+    position: relative;
+    z-index: 2;
+    color: $color_1;
+  }
 }
-.search-button i {
-  position: relative;
-  z-index: 2;
-  color: white;
-}
-
 .search-home-fa {
   text-align: center;
   width: 30px;
@@ -1098,25 +1054,24 @@ button.create-account-button:active {
   opacity: 1;
   opacity: 0.6;
 }
-
 .search-results-container.center-content {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
 }
-
-.search-results-container h2 {
-  margin-bottom: 10px;
+.search-results-container {
+  h2 {
+    margin-bottom: 10px;
+  }
+  ul {
+    padding: 0;
+    list-style-type: none;
+  }
+  li {
+    margin-bottom: 10px;
+  }
 }
-.search-results-container ul {
-  padding: 0;
-  list-style-type: none;
-}
-.search-results-container li {
-  margin-bottom: 10px;
-}
-
 .profile-search-container {
   display: flex;
   align-items: center;
@@ -1124,7 +1079,6 @@ button.create-account-button:active {
   position: relative;
   margin-bottom: 40px;
 }
-
 .container.follow-list-container {
   display: flex;
   flex-direction: column;
@@ -1134,68 +1088,59 @@ button.create-account-button:active {
   box-sizing: border-box;
   margin-top: 80px;
 }
-
 .custom-header {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
 }
-
 .page-title {
   margin: 0;
   margin-left: 10px;
 }
-
 .tab-container {
   width: 100%;
   max-width: 400px;
-  background-color: #444;
+  background-color: $background-color_14;
   padding: 15px;
   border-radius: 5px;
   margin-top: 10px;
   box-sizing: border-box;
 }
-
 .tab-list {
   display: flex;
   gap: 15px;
   justify-content: center;
 }
-
 .tab-link {
   list-style: none;
   font-size: 16px;
   cursor: pointer;
   border-radius: 5px;
   transition: background-color 0.3s;
-  color: white;
+  color: $color_1;
 }
-
 .tab-link.active {
   padding: 3px;
-  color: white;
-  background-color: #1a73e8;
+  color: $color_1;
+  background-color: $background-color_3;
 }
-
 .user-list-container.custom-user-list-container {
   width: 100%;
   max-width: 400px;
   box-sizing: border-box;
   margin-top: 20px;
 }
-
 .user-list.custom-user-list {
   width: 100%;
   padding: 0;
   list-style: none;
 }
-
 .user-details.custom-user-details {
   padding: 10px;
-  background-color: #444;
+  background-color: $background-color_14;
   border-radius: 5px;
   margin: 5px 0;
-  color: white;
+  color: $color_1;
   text-decoration: none;
   display: block;
   cursor: pointer;
@@ -1204,8 +1149,8 @@ button.create-account-button:active {
   text-overflow: ellipsis;
   width: 100%;
   box-sizing: border-box;
+  &:hover {
+    background-color: $background-color_15;
+    text-decoration: underline;
+  }
 }
-.user-details.custom-user-details:hover {
-  background-color: #555;
-  text-decoration: underline;
-} /*# sourceMappingURL=style.css.map */

@@ -1,0 +1,58 @@
+extends layout
+
+mixin interactionContainer(item, hasLiked)
+  div.like-buttons-container
+    form(onsubmit=`handleLikeSubmit(event, '${item._id}')`, action=hasLiked ? "/unlike" : "/like", method="post")
+      button.like-buttons.like(type='submit' name="tweetId" value= item._id)
+        i(class=[hasLiked ? "fas fa-heart" : "far fa-heart"])
+        span.tweet-like-count
+          - const likeCount = item.likedUsers.length || 0;
+          if (likeCount > 0)
+            | #{likeCount}
+
+block content
+  head
+    meta(charset='UTF-8')
+    meta(http-equiv='X-UA-Compatible' content='IE=edge')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css')
+    title Document
+
+  block header
+    div.profile-search-container
+      div.profile-icon-container
+        a(href=`/${username}`)
+          i(class="fas fa-user")
+      form(action='/search' method='post' class="search-form")
+        input(type='text' name='query' placeholder='Search...')
+        button(type='submit' class="search-button")
+          i(class="fas fa-search")
+
+  if (searchResults && (searchResults.users.length > 0 || searchResults.tweets.length > 0))
+    div.search-results-container.center-content
+      if (searchResults.users.length > 0)
+        h2 Users
+        ul
+          each user in searchResults.users
+            li
+              a(href=`/${user.username}`) #{user.username}
+
+      if (searchResults.tweets.length > 0)
+        h2 Tweets
+        ul.tweet-list
+          each tweet in searchResults.tweets
+            div.tweet-container(id=`tweet-${tweet._id}`)
+              - if (tweet.tweetOwner === username)
+                div.delete-button-container
+                  form(action='/delete' method='POST')
+                    button(type='submit' class="delete-button" name="reqDelete" value= tweet._id)
+                      i(class="fa-solid fa-trash")
+              span.tweet-owner= tweet.tweetOwner
+              li.tweet-text= tweet.tweet
+              +interactionContainer(tweet, tweet.likedUsers.includes(username))
+  else
+    p No results found.
+
+  div.back-to-home-div
+    a(href='/' class="back-to-home-button")
+      i(class="fas fa-home")

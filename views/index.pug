@@ -1,21 +1,108 @@
 extends layout
 
 block content
-  title Twapp
-  .container
-    h1 Twapp
-  div(class="login-register-div")
-    h2 Login     
-    div(class="index-form-div")
-      form(action='/login' method='post')
-        input#username(type='text' name='username' placeholder='Enter your username')
-        input#password(type='password' name='password' placeholder='Enter your password')
-        button(type='submit' class="login-register-div-buttons" name='formLoginType' value='login') Submit
-  div(class="login-register-div")
-    h2 Register
-    div(class="index-form-div")
-      form(action='/register' method='post')
-        input#username(type='text' name='username' placeholder='Enter your username')
-        input#password(type='password' name='password' placeholder='Enter your password')
-        button(type='submit' class="login-register-div-buttons" name='formRegisterType' value='register') Submit
-    p(class="error-message-register")= message
+  head
+    title Twapp
+
+  .container.centered-page
+    .auth-form-container
+      h1(Login)
+      form#loginForm(action='/login' method='post')
+        .form-group
+          label(for="loginUsername") Username
+          input#loginUsername(type='text' name='username' placeholder='Enter your username' required)
+        span#loginErrorUsername.error-message-container(class=`${loginErrorField === 'username' && loginError ? 'has-error show' : ''}`)
+          | #{loginErrorField === 'username' && loginError ? `${loginError}` : ''}
+
+        .form-group
+          label(for="loginPassword") Password
+          input#loginPassword(type='password' name='password' placeholder='Enter your password' required)
+        span#loginErrorPassword.error-message-container(class=`${loginErrorField === 'password' && loginError ? 'has-error show' : ''}`)
+          | #{loginErrorField === 'password' && loginError ? `${loginError}` : ''}
+
+        button.auth-button(type='submit' name='formLoginType' value='login') Login
+        button.create-account-button(id='createAccountButton' type='button') Create a new account
+
+    #backgroundOverlay(style="display: none;")
+      #registerPopup(style="display: none;")
+        button.close-button(type="button" onclick="toggleRegisterForm()") ×
+        .form-container
+          h1(Register)
+          form#registerForm(action='/register' method='post' onsubmit="return submitForm(this);")
+            .form-group
+              label(for="registerUsername") Choose a Username
+              input#registerUsername(type='text' name='username' placeholder='Pick a username' required)
+              div#usernameAvailability
+            span#registerErrorUsername.error-message-container(class=`${registerErrorField === 'username' && registerError ? 'has-error show' : ''}`)
+              | #{registerErrorField === 'username' && registerError ? `${registerError}` : ''}
+
+            .form-group
+              label(for="registerPassword") Set a Password
+              input#registerPassword(type='password' name='password' placeholder='Create a password' required)
+              span#registerErrorPassword.error-message-container(class=`${registerErrorField === 'password' && registerError ? 'has-error show' : ''}`)
+                | #{registerErrorField === 'password' && registerError ? `${registerError}` : ''}
+
+            button.auth-button(type='submit' name='formRegisterType' value='register') Register
+
+        script.
+          document.addEventListener('DOMContentLoaded', () => {
+            const registerFormDiv = document.getElementById("registerPopup");
+            const backgroundOverlay = document.getElementById("backgroundOverlay");
+
+            registerFormDiv.style.display = "none";
+
+            const storedError = sessionStorage.getItem('registerError');
+            if (storedError) {
+              document.getElementById("registerErrorUsername").textContent =
+                registerErrorField === 'username' ? storedError : '';
+              document.getElementById("registerErrorPassword").textContent =
+                registerErrorField === 'password' ? storedError : '';
+
+              sessionStorage.removeItem('registerError');
+
+              registerFormDiv.style.display = "block";
+              backgroundOverlay.style.display = "block";
+            }
+
+            document.getElementById("createAccountButton").addEventListener('click', () => {
+              clearRegisterFormErrors();
+              toggleRegisterForm();
+            });
+          });
+
+          const clearRegisterFormErrors = () => {
+            document.getElementById("registerErrorUsername").textContent = '';
+            document.getElementById("registerErrorPassword").textContent = '';
+          };
+
+          const toggleRegisterForm = () => {
+            const registerFormDiv = document.getElementById("registerPopup");
+            const backgroundOverlay = document.getElementById("backgroundOverlay");
+
+            clearRegisterFormErrors();
+
+            registerFormDiv.style.display = registerFormDiv.style.display === "none" ? "block" : "none";
+            backgroundOverlay.style.display = backgroundOverlay.style.display === "none" ? "block" : "none";
+          };
+
+          const submitForm = (form) => {
+            const errorField = form.querySelector('.error-message-container');
+            const isUsernameTakenError = /Username already taken/.test(errorField.textContent);
+
+            console.log("Error Message:", errorField.textContent);
+            console.log("Is Username Taken Error:", isUsernameTakenError);
+
+            if (isUsernameTakenError) {
+              document.getElementById("registerErrorPassword").textContent = '';
+              return false;
+            }
+
+            errorField.textContent = '';
+            return !form.error;
+          };
+
+          setTimeout(() => {
+            document.querySelectorAll('.error-message-container.show').forEach((el) => {
+              el.classList.remove('show');
+            });
+          }, 5000);

@@ -1,8 +1,6 @@
-const checkAuthenticated = (req, res, next) => {
+module.exports = function checkAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
-  return res.redirect('/');
+  res.redirect("/login");
 };
-
-module.exports = checkAuthenticated;

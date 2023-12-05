@@ -1,61 +1,64 @@
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
 }
 
-console.log(process.env.DATABASE_URL);
-
-const express = require('express');
-const createError = require('http-errors');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
-const session = require('express-session');
-const passport = require('passport');
-const methodOverride = require('method-override');
-const { CONFIG } = require('./config');
-const indexRouter = require('./routes/index');
-const mongoose = require('mongoose');
+const express = require("express");
+const createError = require("http-errors");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
+const session = require("express-session");
+const passport = require("passport");
+const methodOverride = require("method-override");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const { CONFIG } = require("./config");
+const indexRouter = require("./routes/index");
 
 const app = express();
 
-mongoose.connect(CONFIG.DB_URL); // TODO: this should be in .env file
+const corsOptions = {
+  origin: "http://localhost:3000",
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+
+mongoose.connect(CONFIG.DB_URL);
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "pug");
 
-app.use(logger(CONFIG.NODE_ENV)); // TODO: this should be in .env file
+app.use(logger(CONFIG.NODE_ENV));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(
   session({
-    secret: process.env.SESSION_SECRET ?? 'hehe_secret_hehe', // TODO: what if there is no SESSION_SECRET in .env file?
+    secret: process.env.SESSION_SECRET || "hehe_secret_hehe",
     resave: false,
     saveUninitialized: false,
-  }),
+  })
 );
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(methodOverride('_method'));
+app.use(methodOverride("_method"));
 
-app.use('/', indexRouter); // TODO: instead of grouping all resources under one file, we should group them by resource type (userRoutes, tweetRoutes, feedRoutes, etc.)
+app.use("/", indexRouter);
 
-// catch 404 and forward to error handler
+// Catch 404 and forward to error handler
 app.use((req, res, next) => {
   next(createError(404));
 });
 
-// error handler
+// Error handler
 app.use((err, req, res, next) => {
-  // set locals, only providing error in development
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === CONFIG.NODE_ENV ? err : {}; // TODO: this won't work properly. Because you are expecting "env" to be both "dev" and "development". You should use a single value for both.
-
-  // render the error page
+  res.locals.error = req.app.get("env") === CONFIG.NODE_ENV ? err : {};
   res.status(err.status || 500);
-  res.render('error');
+  res.render("error");
 });
 
 module.exports = app;

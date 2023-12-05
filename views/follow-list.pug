@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  head
+    meta(charset='UTF-8')
+    meta(http-equiv='X-UA-Compatible' content='IE=edge')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css')
+    title= pageTitle
+
+  .container.follow-list-container
+    .custom-header
+      a(href=`/${username}` class="back-to-profile-button")
+        i(class="fas fa-arrow-left")
+      h1.page-title= pageTitle
+
+    .tab-container
+      .tab-list
+        li(class=`tab-link ${activeTab === 'followers' ? 'active' : ''}`)
+          a(href=`/${username}/followers` class="tab-link") Followers
+        li(class=`tab-link ${activeTab === 'following' ? 'active' : ''}`)
+          a(href=`/${username}/following` class="tab-link") Following
+
+    .user-list-container.custom-user-list-container
+      ul.user-list.custom-user-list
+        each user in users
+          li.user-profile.custom-user-profile
+            a(href=`/${user}` class='user-details custom-user-details')= user
